@@ -36,6 +36,22 @@ class EntryUpdate(BaseModel):
     published_at: datetime | None = None
 
 
+class EntryPublicResponse(BaseModel):
+    id: str | None = None
+    title: str
+    subtitle: str | None = None
+    slug: str
+    category: str | None = None
+    summary: str | None = None
+    content_html: str
+    created_at: datetime | None = None
+    updated_at: datetime | None = None
+    published_at: datetime | None = None
+
+    class Config:
+        allow_population_by_field_name = True
+
+
 class EntryOut(EntryBase):
     id: uuid.UUID
     created_at: datetime

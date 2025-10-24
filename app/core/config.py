@@ -15,6 +15,12 @@ class Settings(BaseSettings):
 
     database_url: str
 
+    sanity_project_id: str = "4bbukn54"
+    sanity_dataset: str = "production"
+    sanity_api_version: str = "2023-05-03"
+    sanity_token: Optional[str] = None
+    sanity_use_cdn: bool = True
+
     jwt_secret_key: str = secrets.token_urlsafe(32)
     jwt_algorithm: str = "HS256"
     access_token_expire_minutes: int = 60 * 24
@@ -32,6 +38,12 @@ class Settings(BaseSettings):
         if isinstance(v, str):
             return [origin.strip() for origin in v.split(",") if origin.strip()]
         return v
+
+    @property
+    def sanity_dataset_url(self) -> str:
+        host = "apicdn" if self.sanity_use_cdn else "api"
+        base = f"https://{self.sanity_project_id}.{host}.sanity.io/{self.sanity_api_version}"
+        return f"{base}/data/query/{self.sanity_dataset}"
 
 
 @lru_cache
