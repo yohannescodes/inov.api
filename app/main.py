@@ -16,8 +16,9 @@ from app.db.session import engine
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
+    if engine is not None:
+        async with engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
     yield
 
 
@@ -35,9 +36,14 @@ if settings.cors_origins:
 static_dir = Path(__file__).resolve().parent / "static" / "admin"
 app.mount("/admin", StaticFiles(directory=static_dir, html=True), name="admin")
 
-app.include_router(auth.router, prefix=settings.api_v1_prefix)
+if engine is not None:
+    app.include_router(auth.router, prefix=settings.api_v1_prefix)
+    app.include_router(admin_entries.router, prefix=settings.api_v1_prefix)
+else:
+    # Database-free mode: expose only public entry endpoints
+    pass
+
 app.include_router(public_entries.router, prefix=settings.api_v1_prefix)
-app.include_router(admin_entries.router, prefix=settings.api_v1_prefix)
 
 
 @app.get("/health", tags=["health"])

@@ -12,7 +12,7 @@ FastAPI API serving content for novarch.lol. Public entry endpoints now source d
 
 | Variable | Description |
 | --- | --- |
-| `DATABASE_URL` | Connection string for the primary database. |
+| `DATABASE_URL` | (Optional) Connection string for the primary database. Needed only if you plan to use the auth/admin endpoints. |
 | `SANITY_PROJECT_ID` | Sanity project id (defaults to `4bbukn54`). |
 | `SANITY_DATASET` | Dataset to read from (defaults to `production`). |
 | `SANITY_API_VERSION` | Sanity API version (defaults to `2023-05-03`). |
