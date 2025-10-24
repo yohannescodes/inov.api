@@ -1,0 +1,27 @@
+# Python caches
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Environments / secrets
+.env
+.env.*
+*.env
+
+# macOS artifacts
+.DS_Store
+
+# Tooling caches
+.mypy_cache/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# IDE metadata
+.vscode/
+.idea/
+
+# Build outputs
+build/
+dist/
+*.egg-info/

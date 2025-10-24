@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Novarchism Admin</title>
+  <link rel="stylesheet" href="/admin/css/styles.css" />
+</head>
+<body>
+  <main id="app">
+    <section id="login-view" class="card">
+      <h1>Novarchism Admin</h1>
+      <p class="hint">Enter your credentials to open the archive.</p>
+      <form id="login-form">
+        <label>
+          Email
+          <input type="email" name="email" autocomplete="username" required />
+        </label>
+        <label>
+          Password
+          <input type="password" name="password" autocomplete="current-password" required />
+        </label>
+        <button type="submit">Unlock</button>
+        <p id="login-error" class="error" role="alert"></p>
+      </form>
+    </section>
+
+    <section id="dashboard-view" class="hidden">
+      <header class="toolbar">
+        <div>
+          <h2>Living Archive</h2>
+          <p>Manage doctrines, creeds and rites.</p>
+        </div>
+        <button id="logout-button" class="ghost">Sign out</button>
+      </header>
+
+      <section class="card">
+        <h3>Create / Update Entry</h3>
+        <form id="entry-form">
+          <input type="hidden" name="entryId" />
+          <label>
+            Title
+            <input type="text" name="title" required />
+          </label>
+          <label>
+            Subtitle
+            <input type="text" name="subtitle" />
+          </label>
+          <label>
+            Slug
+            <input type="text" name="slug" required placeholder="novarchist-creed" />
+          </label>
+          <label>
+            Category
+            <select name="category" required>
+              <option value="doctrine">Doctrine</option>
+              <option value="creed">Creed</option>
+              <option value="ritual">Ritual</option>
+              <option value="prayer">Prayer</option>
+              <option value="event">Event</option>
+              <option value="testimony">Testimony</option>
+              <option value="other">Other</option>
+            </select>
+          </label>
+          <label>
+            Summary
+            <textarea name="summary" rows="2"></textarea>
+          </label>
+          <label>
+            Content (HTML)
+            <textarea name="content_html" rows="10" required></textarea>
+          </label>
+          <label>
+            Content (Markdown optional)
+            <textarea name="content_markdown" rows="8"></textarea>
+          </label>
+          <label class="inline">
+            <input type="checkbox" name="is_published" /> Published
+          </label>
+          <label>
+            Published at (ISO8601)
+            <input type="datetime-local" name="published_at" />
+          </label>
+          <div class="form-actions">
+            <button type="submit">Save Entry</button>
+            <button type="button" id="reset-form" class="ghost">Clear</button>
+          </div>
+          <p id="form-status" role="status"></p>
+        </form>
+      </section>
+
+      <section class="card">
+        <h3>Existing Entries</h3>
+        <table id="entries-table">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Category</th>
+              <th>Published</th>
+              <th>Updated</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+    </section>
+  </main>
+
+  <script>window.__API_PREFIX__ = "${location.origin}/api/v1";</script>
+  <script src="/admin/js/app.js" type="module"></script>
+</body>
+</html>

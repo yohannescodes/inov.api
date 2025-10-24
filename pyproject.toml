@@ -1,0 +1,32 @@
+[project]
+name = "novarch-backend"
+version = "0.1.0"
+description = "Novarchism admin API"
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi>=0.110.0",
+  "uvicorn[standard]>=0.29.0",
+  "sqlalchemy[asyncio]>=2.0.0",
+  "asyncpg>=0.29.0",
+  "python-jose[cryptography]>=3.3.0",
+  "passlib[bcrypt]>=1.7.4",
+  "python-dotenv>=1.0.0",
+  "pydantic[email]>=1.10.0",
+  "jinja2>=3.1.0"
+]
+
+[project.optional-dependencies]
+dev = [
+  "alembic>=1.13.0",
+  "ipython",
+  "ruff",
+  "pytest>=7.4",
+  "httpx[http2]>=0.27"
+]
+
+[tool.uvicorn]
+app = "app.main:app"
+factory = false
+reload = true
+host = "0.0.0.0"
+port = 8000
