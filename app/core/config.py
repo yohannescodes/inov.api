@@ -44,6 +44,10 @@ class Settings(BaseSettings):
         return v
 
     @property
+    def has_database(self) -> bool:
+        return bool(self.database_url)
+
+    @property
     def sanity_dataset_url(self) -> str:
         host = "apicdn" if self.sanity_use_cdn else "api"
         api_version = self.sanity_api_version
