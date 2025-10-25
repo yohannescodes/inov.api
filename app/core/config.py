@@ -39,6 +39,12 @@ class Settings(BaseSettings):
             return [origin.strip() for origin in v.split(",") if origin.strip()]
         return v
 
+    @validator("database_url", pre=True)
+    def empty_string_database_url(cls, v: str | None) -> str | None:
+        if isinstance(v, str) and not v.strip():
+            return None
+        return v
+
     @property
     def sanity_dataset_url(self) -> str:
         host = "apicdn" if self.sanity_use_cdn else "api"
