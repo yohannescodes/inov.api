@@ -48,7 +48,10 @@ class Settings(BaseSettings):
     @property
     def sanity_dataset_url(self) -> str:
         host = "apicdn" if self.sanity_use_cdn else "api"
-        base = f"https://{self.sanity_project_id}.{host}.sanity.io/{self.sanity_api_version}"
+        api_version = self.sanity_api_version
+        if not api_version.startswith("v"):
+            api_version = f"v{api_version}"
+        base = f"https://{self.sanity_project_id}.{host}.sanity.io/{api_version}"
         return f"{base}/data/query/{self.sanity_dataset}"
 
 
