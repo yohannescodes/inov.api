@@ -23,7 +23,7 @@ class Settings(BaseSettings):
     jwt_algorithm: str = "HS256"
     access_token_expire_minutes: int = 60 * 24
 
-    cors_origins: List[AnyHttpUrl] | List[str] = []
+    cors_origins: list[str] = []
     supabase_service_role_key: Optional[str] = None
 
     class Config:
@@ -45,7 +45,6 @@ class Settings(BaseSettings):
         if not self.sanity_project_id or not self.sanity_dataset:
             return None
         return f"https://{self.sanity_project_id}.api.sanity.io/{self.sanity_api_version}/data/query/{self.sanity_dataset}"
-
 
 @lru_cache()
 def get_settings() -> Settings:
