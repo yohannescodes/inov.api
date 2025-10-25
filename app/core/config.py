@@ -53,6 +53,12 @@ class Settings(BaseSettings):
             api_version = f"v{api_version}"
         base = f"https://{self.sanity_project_id}.{host}.sanity.io/{api_version}"
         return f"{base}/data/query/{self.sanity_dataset}"
+ @property
+    def has_database(self) -> bool:
+        """
+        Returns True if a valid DATABASE_URL exists.
+        """
+        return bool(self.database_url and self.database_url.strip())
 
 
 @lru_cache
