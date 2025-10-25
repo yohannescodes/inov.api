@@ -2,17 +2,16 @@ from __future__ import annotations
 
 import secrets
 from functools import lru_cache
-from typing import Optional
+from typing import Optional, List
 
 from pydantic import AnyHttpUrl, validator
 from pydantic_settings import BaseSettings
-
 
 class Settings(BaseSettings):
     app_name: str = "Novarchism Backend"
     environment: str = "development"
     api_v1_prefix: str = "/api/v1"
-    database_url: str | None = None
+    database_url: Optional[str] = None
 
     sanity_project_id: str = "4bbukn54"
     sanity_dataset: str = "production"
@@ -24,49 +23,30 @@ class Settings(BaseSettings):
     jwt_algorithm: str = "HS256"
     access_token_expire_minutes: int = 60 * 24
 
-    cors_origins: list[AnyHttpUrl] | list[str] = []
+    cors_origins: List[AnyHttpUrl] | List[str] = []
     supabase_service_role_key: Optional[str] = None
 
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"
 
-    @validator("cors_origins", pre=True)
-    def assemble_cors_origins(cls, v: str | list[str]) -> list[str]:
-        if isinstance(v, str):
-            return [origin.strip() for origin in v.split(",") if origin.strip()]
-        return v
-
-    @validator("database_url", pre=True)
-    def empty_string_database_url(cls, v: str | None) -> str | None:
-        if isinstance(v, str) and not v.strip():
-            return None
-        return v
-
-    @property
-    def has_database(self) -> bool:
-        return bool(self.database_url)
-
-    @property
-    def sanity_dataset_url(self) -> str:
-        host = "apicdn" if self.sanity_use_cdn else "api"
-        api_version = self.sanity_api_version
-        if not api_version.startswith("v"):
-            api_version = f"v{api_version}"
-        base = f"https://{self.sanity_project_id}.{host}.sanity.io/{api_version}"
-        return f"{base}/data/query/{self.sanity_dataset}"
-
     @property
     def has_database(self) -> bool:
         """
-        Returns True if a valid DATABASE_URL exists.
+        Returns True if a database URL is provided, otherwise False.
         """
         return bool(self.database_url and self.database_url.strip())
 
+    @property
+    def sanity_dataset_url(self) -> Optional[str]:
+        """
+        Construct the Sanity API endpoint for dataset queries or return None if config is incomplete.
+        """
+        if not self.sanity_project_id or not self.sanity_dataset:
+            return None
+        return f"https://{self.sanity_project_id}.api.sanity.io/{self.sanity_api_version}/data/query/{self.sanity_dataset}"
 
-@lru_cache
+
+@lru_cache()
 def get_settings() -> Settings:
     return Settings()
-
-
-settings = get_settings()
