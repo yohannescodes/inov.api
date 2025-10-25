@@ -12,7 +12,6 @@ class Settings(BaseSettings):
     app_name: str = "Novarchism Backend"
     environment: str = "development"
     api_v1_prefix: str = "/api/v1"
-
     database_url: str | None = None
 
     sanity_project_id: str = "4bbukn54"
@@ -26,7 +25,6 @@ class Settings(BaseSettings):
     access_token_expire_minutes: int = 60 * 24
 
     cors_origins: list[AnyHttpUrl] | list[str] = []
-
     supabase_service_role_key: Optional[str] = None
 
     class Config:
@@ -53,7 +51,8 @@ class Settings(BaseSettings):
             api_version = f"v{api_version}"
         base = f"https://{self.sanity_project_id}.{host}.sanity.io/{api_version}"
         return f"{base}/data/query/{self.sanity_dataset}"
- @property
+
+    @property
     def has_database(self) -> bool:
         """
         Returns True if a valid DATABASE_URL exists.
